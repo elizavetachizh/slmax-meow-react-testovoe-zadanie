@@ -6,7 +6,9 @@ interface AppContextType {
   products: IProduct[];
   employees: IEmployee[];
   updateProduct: (updatedProduct: IProduct) => void;
-  updateEmployee: (updatedEmployee: IEmployee) => void;
+  addProduct: (newProduct: IProduct) => void;
+  deleteProduct: (productId: number) => void;
+  addEmployeeFeedback: (employeeId: number, feedback: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -22,18 +24,35 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       ),
     );
   };
+  const addProduct = (newProduct: IProduct) => {
+    setProducts((prevProducts) => [...prevProducts, newProduct]);
+  };
 
-  const updateEmployee = (updatedEmployee: IEmployee) => {
+  const deleteProduct = (productId: number) => {
+    setProducts((prevProducts) =>
+      prevProducts.filter((product) => product.id !== productId),
+    );
+  };
+  const addEmployeeFeedback = (employeeId: number, feedback: string) => {
     setEmployees((prevEmployees) =>
       prevEmployees.map((employee) =>
-        employee.id === updatedEmployee.id ? updatedEmployee : employee,
+        employee.id === employeeId
+          ? { ...employee, feedback: [...employee.feedback, feedback] }
+          : employee,
       ),
     );
   };
 
   return (
     <AppContext.Provider
-      value={{ products, employees, updateProduct, updateEmployee }}
+      value={{
+        products,
+        employees,
+        updateProduct,
+        addProduct,
+        deleteProduct,
+        addEmployeeFeedback,
+      }}
     >
       {children}
     </AppContext.Provider>

@@ -26,7 +26,7 @@ export default function Products() {
             <EmployeeCard employee={employee} />
             <Link href={`/employees/${employee.id}`} passHref>
               <Button variant="contained" color="primary" fullWidth>
-                Edit {employee.name}
+                Add feedback to {employee.name}
               </Button>
             </Link>
           </Grid>
